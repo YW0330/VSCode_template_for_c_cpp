@@ -1,0 +1,29 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "type": "shell",
+            "label": "C/C++: g++ 建置使用中檔案",
+            "linux": {
+                "command": "make",
+            },
+            "args": [
+                "MODE=debug",
+                "FILENAME=${fileBasenameNoExtension}"
+            ],
+            "detail": "偵錯工具產生的工作。"
+        },
+        {
+            "type": "shell",
+            "label": "清除建置完成的檔案",
+            "linux": {
+                "command": "make",
+                "args": [
+                    "clean",
+                    "PLATFORM=linux"
+                ],
+            },
+            "detail": "清除建置後的執行檔與目標檔。"
+        }
+    ]
+}
