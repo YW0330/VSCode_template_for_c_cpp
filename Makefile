@@ -1,5 +1,7 @@
 # 編譯執行的檔案名(要包含 main 函式)
 FILENAME ?= main
+# 作業系統 linux/windows
+PLATFORM ?= windows
 # 引用到的 libary 名稱
 LIBSNAME = 
 # include 的路徑
@@ -14,12 +16,11 @@ TESTDIR = test
 SRCDIR = src
 # release/debug 模式
 MODE ?= release
-# 作業系統
-PLATFORM ?= linux
+
 
 # 編譯器設定
 CC = g++
-CFLAG = -Wall -std=c++11 -fexec-charset=UTF8 
+CFLAG = -Wall -std=c++11 -fexec-charset=BIG5
 INCLUDEPATH = $(foreach include, $(INCLUDEDIR), -I$(include))
 LIBPATH = $(foreach lib, $(LIBDIR), -L$(lib))
 LIBS = $(foreach libname, $(LIBSNAME), -l$(libname))
@@ -51,16 +52,20 @@ target: $(TARGETEXE)
 	@$(CC) $(CFLAG) -c $< -o $@ $(INCLUDEPATH)
 
 run:
-	@echo "\n=====Program Start====="
+	@echo "===== Program Start ====="
 ifeq ($(PLATFORM), linux)
 	@sudo LD_LIBRARY_PATH=$(LIBDIR) $(TARGETEXE)
 else ifeq ($(PLATFORM), windows)
-	@LD_LIBRARY_PATH=$(LIBDIR) $(TARGETEXE)
+	@$(TARGETEXE)
 endif
-	@echo "\n=====Program End====="
+	@echo "===== Program End ====="
 
 .PHONY: clean
 clean:
+ifneq ($(MODE), debug)
+	@rm -f $(TESTDIR)/*.exe
+	@rm -f $(SRCDIR)/*.o $(TESTDIR)/*.o
+else
 ifeq ($(PLATFORM), linux)
 	@rm -f $(TESTDIR)/*.exe
 	@rm -f $(SRCDIR)/*.o $(TESTDIR)/*.o
@@ -68,4 +73,4 @@ else ifeq ($(PLATFORM), windows)
 	@del $(TESTDIR)\*.exe
 	@del $(SRCDIR)\*.o $(TESTDIR)\*.o
 endif
-	
+endif

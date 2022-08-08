@@ -6,11 +6,25 @@
             "label": "C/C++: g++ 建置使用中檔案",
             "linux": {
                 "command": "make",
+                "args": [
+                    "MODE=debug",
+                    "PLATFORM=linux",
+                    "FILENAME=${fileBasenameNoExtension}"
+                ]
             },
-            "args": [
-                "MODE=debug",
-                "FILENAME=${fileBasenameNoExtension}"
-            ],
+            "windows": {
+                "command": "mingw32-make",
+                "args": [
+                    "MODE=debug",
+                    "PLATFORM=windows",
+                    "FILENAME=${fileBasenameNoExtension}"
+                ]
+            },
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "problemMatcher": "$gcc",
             "detail": "偵錯工具產生的工作。"
         },
         {
@@ -21,6 +35,13 @@
                 "args": [
                     "clean",
                     "PLATFORM=linux"
+                ],
+            },
+            "windows": {
+                "command": "mingw32-make",
+                "args": [
+                    "clean",
+                    "PLATFORM=windows"
                 ],
             },
             "detail": "清除建置後的執行檔與目標檔。"
