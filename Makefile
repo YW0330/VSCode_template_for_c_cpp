@@ -20,36 +20,45 @@ MODE ?= release
 
 # 編譯器設定
 CC = g++
-CFLAG = -Wall -std=c++11 -fexec-charset=BIG5
+CFLAG = -Wall -fexec-charset=BIG5
 INCLUDEPATH = $(foreach include, $(INCLUDEDIR), -I$(include))
 LIBPATH = $(foreach lib, $(LIBDIR), -L$(lib))
 LIBS = $(foreach libname, $(LIBSNAME), -l$(libname))
 
-SRC = $(wildcard $(SRCDIR)/*.cpp)
-SRCOBJ = $(patsubst %.cpp, %.o, $(SRC))
+SRCS = $(wildcard $(SRCDIR)/*.cpp)
+SRCOBJS = $(patsubst %.cpp, %.o, $(SRCS))
+OBJS = $(SRCOBJS)
 
-TESTSRC = $(wildcard $(TESTDIR)/*.cpp)
-TESTEXE = $(patsubst %.cpp, %.exe, $(TESTSRC))
+TESTSRCS = $(wildcard $(TESTDIR)/*.cpp)
+TESTOBJS = $(patsubst %.cpp, %.o, $(TESTSRCS))
+TESTEXES = $(patsubst %.cpp, %.exe, $(TESTSRCS))
 
 TARGETSRC = $(TESTDIR)/$(FILENAME).cpp
+TARGETOBJ = $(patsubst %.cpp, %.o, $(TARGETSRC))
 TARGETEXE = $(patsubst %.cpp, %.exe, $(TARGETSRC))
 
 ifeq ($(MODE), debug)
 CFLAG += -g
-all: clean target 
+default: clean target 
 else
 CFLAG += -Os
-all: clean target run 
+default: clean target run 
+all: clean compile
 endif
 
-compile: $(TESTEXE)
+compile: $(TESTEXES)
+OBJS += $(TESTOBJS)
+	
 target: $(TARGETEXE) 
-
-%.exe: %.o $(SRCOBJ)
+OBJS += $(TARGETOBJ)
+	
+%.exe: %.o $(SRCOBJS)
 	@$(CC) $(CFLAG) $^ -o $@ $(INCLUDEPATH) $(LIBS) $(LIBPATH)
 
 %.o: %.cpp
 	@$(CC) $(CFLAG) -c $< -o $@ $(INCLUDEPATH)
+
+.SECONDARY: $(OBJS)
 
 run:
 	@echo "===== Program Start ====="
@@ -62,15 +71,10 @@ endif
 
 .PHONY: clean
 clean:
-ifneq ($(MODE), debug)
-	@rm -f $(TESTDIR)/*.exe
-	@rm -f $(SRCDIR)/*.o $(TESTDIR)/*.o
-else
 ifeq ($(PLATFORM), linux)
 	@rm -f $(TESTDIR)/*.exe
 	@rm -f $(SRCDIR)/*.o $(TESTDIR)/*.o
 else ifeq ($(PLATFORM), windows)
 	@del $(TESTDIR)\*.exe
 	@del $(SRCDIR)\*.o $(TESTDIR)\*.o
-endif
 endif
