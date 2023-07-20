@@ -13,7 +13,7 @@
 #### 筆者使用方法
 - [安裝 Mingw-w64 教程](https://hackmd.io/lP1-gxvySE272znXo7LOhg?view)
 
-另外筆者在 Windows 環境下有另外安裝 Cmder，可以在終端機中使用 Linux 下的命令。可以參考[安裝 Cmder 教程](https://hackmd.io/iu70emqUSoinsNzF61wfWw?both)。
+另外筆者在 Windows 環境下有另外安裝 Cmder，可以在終端機中使用 Linux 下的命令。可以參考[安裝 Cmder 教學](https://hackmd.io/iu70emqUSoinsNzF61wfWw?both)。
 
 ## 使用方法
 ### 各資料夾簡介：
@@ -26,18 +26,19 @@
 ### 常用操作命令：
 Visual Studio Code 偵錯模式：
 在想要偵錯的測試主程式頁面中，設置中斷點。接著點選 VSCode 左側`執行與偵錯`頁籤 -> 點選上方的 `C/C++: g++ 建置及偵錯使用中的檔案`；或是直接按下 `F5` 進行偵錯。
+
 #### Linux 作業系統
 - 終端機中編譯檔案並執行
     ```shell
-    $ make
+    $ make PLATFORM=linux
     ```
     可以更改 `Makefile` 中的 `FILENAME` 來選擇自行新建的檔案。或是執行
     ```shell
-    $ make FILENAME=<desired filename>
+    $ make FILENAME=<desired filename> PLATFORM=linux
     ```
     其他個人化選項，請參考 `Makefile` 中的註解。
 #### Windows 作業系統
-- 終端機中編譯檔案並執行: 將命令從 `make` 變更為 `mingw32-make`。
+- 終端機中編譯檔案並執行: 將命令從 `make` 變更為 `mingw32-make PLATFORM=windows`。
 
 
 
