@@ -1,7 +1,10 @@
+# 作業系統 [linux, windows]
+PLATFORM ?= windows
+# 語言設定 [C 語言: c, C++: cpp]
+LANG = cpp
 # 編譯執行的檔案名(要包含 main 函式)
 FILENAME ?= main
-# 作業系統 linux/windows
-PLATFORM ?= windows
+
 # 引用到的 libary 名稱
 LIBSNAME = 
 # include 的路徑
@@ -17,26 +20,30 @@ SRCDIR = src
 # release/debug 模式
 MODE ?= release
 
-
 # 編譯器設定
+ifeq ($(LANG), c)
+CC = gcc
+else ifeq ($(LANG), cpp)
 CC = g++
+endif
 CFLAG = -Wall -fexec-charset=BIG5
 INCLUDEPATH = $(foreach include, $(INCLUDEDIR), -I$(include))
 LIBPATH = $(foreach lib, $(LIBDIR), -L$(lib))
 LIBS = $(foreach libname, $(LIBSNAME), -l$(libname))
 
-SRCS = $(wildcard $(SRCDIR)/*.cpp)
-SRCOBJS = $(patsubst %.cpp, %.o, $(SRCS))
+SRCS = $(wildcard $(SRCDIR)/*.$(LANG))
+SRCOBJS = $(patsubst %.$(LANG), %.o, $(SRCS))
 OBJS = $(SRCOBJS)
 
-TESTSRCS = $(wildcard $(TESTDIR)/*.cpp)
-TESTOBJS = $(patsubst %.cpp, %.o, $(TESTSRCS))
-TESTEXES = $(patsubst %.cpp, %.exe, $(TESTSRCS))
+TESTSRCS = $(wildcard $(TESTDIR)/*.$(LANG))
+TESTOBJS = $(patsubst %.$(LANG), %.o, $(TESTSRCS))
+TESTEXES = $(patsubst %.$(LANG), %.exe, $(TESTSRCS))
 
-TARGETSRC = $(TESTDIR)/$(FILENAME).cpp
-TARGETOBJ = $(patsubst %.cpp, %.o, $(TARGETSRC))
-TARGETEXE = $(patsubst %.cpp, %.exe, $(TARGETSRC))
+TARGETSRC = $(TESTDIR)/$(FILENAME).$(LANG)
+TARGETOBJ = $(patsubst %.$(LANG), %.o, $(TARGETSRC))
+TARGETEXE = $(patsubst %.$(LANG), %.exe, $(TARGETSRC))
 
+# 最佳化設定
 ifeq ($(MODE), debug)
 CFLAG += -g
 default: clean target 
@@ -55,7 +62,7 @@ OBJS += $(TARGETOBJ)
 %.exe: %.o $(SRCOBJS)
 	@$(CC) $(CFLAG) $^ -o $@ $(INCLUDEPATH) $(LIBS) $(LIBPATH)
 
-%.o: %.cpp
+%.o: %.$(LANG)
 	@$(CC) $(CFLAG) -c $< -o $@ $(INCLUDEPATH)
 
 .SECONDARY: $(OBJS)
@@ -75,6 +82,6 @@ ifeq ($(PLATFORM), linux)
 	@rm -f $(TESTDIR)/*.exe
 	@rm -f $(SRCDIR)/*.o $(TESTDIR)/*.o
 else ifeq ($(PLATFORM), windows)
-	@del $(TESTDIR)\*.exe
-	@del $(SRCDIR)\*.o $(TESTDIR)\*.o
+	@del /f $(TESTDIR)\*.exe
+	@del /f $(SRCDIR)\*.o $(TESTDIR)\*.o
 endif
