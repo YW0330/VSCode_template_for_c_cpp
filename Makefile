@@ -1,5 +1,3 @@
-# 作業系統 [linux, windows]
-PLATFORM ?= windows
 # 語言設定 [C 語言: c, C++: cpp]
 LANG = cpp
 # 編譯執行的檔案名(要包含 main 函式)
@@ -69,19 +67,19 @@ OBJS += $(TARGETOBJ)
 
 run:
 	@echo "===== Program Start ====="
-ifeq ($(PLATFORM), linux)
+ifeq ($(OS), Linux)
 	@sudo LD_LIBRARY_PATH=$(LIBDIR) $(TARGETEXE)
-else ifeq ($(PLATFORM), windows)
+else ifeq ($(OS), Windows_NT)
 	@$(TARGETEXE)
 endif
 	@echo "===== Program End ====="
 
 .PHONY: clean
 clean:
-ifeq ($(PLATFORM), linux)
+ifeq ($(OS), Linux)
 	@rm -f $(TESTDIR)/*.exe
 	@rm -f $(SRCDIR)/*.o $(TESTDIR)/*.o
-else ifeq ($(PLATFORM), windows)
+else ifeq ($(OS), Windows_NT)
 	@del /f $(TESTDIR)\*.exe
 	@del /f $(SRCDIR)\*.o $(TESTDIR)\*.o
 endif

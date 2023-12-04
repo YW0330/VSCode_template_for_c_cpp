@@ -31,15 +31,15 @@ Visual Studio Code 偵錯模式：
 #### Linux 作業系統
 - 終端機中編譯檔案並執行
     ```shell
-    $ make PLATFORM=linux
+    $ make
     ```
     可以更改 `Makefile` 中的 `FILENAME` 來選擇自行新建的檔案。或是執行
     ```shell
-    $ make FILENAME=<desired filename> PLATFORM=linux
+    $ make FILENAME=<desired filename>
     ```
     其他個人化選項，請參考 `Makefile` 中的註解。
 #### Windows 作業系統
-- 終端機中編譯檔案並執行: 將命令從 `make` 變更為 `mingw32-make PLATFORM=windows`。
+- 終端機中編譯檔案並執行: 將命令從 `make` 變更為 `mingw32-make`。
 
 
 

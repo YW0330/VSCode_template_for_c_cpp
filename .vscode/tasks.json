@@ -8,7 +8,6 @@
                 "command": "make",
                 "args": [
                     "MODE=debug",
-                    "PLATFORM=linux",
                     "FILENAME=${fileBasenameNoExtension}"
                 ]
             },
@@ -16,7 +15,6 @@
                 "command": "mingw32-make",
                 "args": [
                     "MODE=debug",
-                    "PLATFORM=windows",
                     "FILENAME=${fileBasenameNoExtension}"
                 ]
             },
@@ -33,15 +31,13 @@
             "linux": {
                 "command": "make",
                 "args": [
-                    "clean",
-                    "PLATFORM=linux"
+                    "clean"
                 ],
             },
             "windows": {
                 "command": "mingw32-make",
                 "args": [
-                    "clean",
-                    "PLATFORM=windows"
+                    "clean"
                 ],
             },
             "detail": "清除建置後的執行檔與目標檔。"
